@@ -34,7 +34,7 @@ object FTPUtils {
 
   def main(args: Array[String]): Unit = {
     FTPUtils.initClient("192.168.3.125", "ftp", "", 21)
-    var i = 0;
+    var i = 0
     println(1)
     for ( s  <- FTPUtils.listFile("/springer")
       .filter(s => {

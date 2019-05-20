@@ -51,8 +51,12 @@ object ftpTest {
       while(!file_name_set.contains(l(index)) && index < l.length - 1) {
         index += 1
       }
-      val path = file_name_set.get(l(index)) // path
-      result.add(l(index) + path)
+      if (!file_name_set.contains(l(index))) {
+        result.add(l(index) + n.doi)
+      } else {
+        val path = file_name_set.get(l(index)) // path
+        result.add(l(index) + path)
+      }
     }
     println(result)
   }
