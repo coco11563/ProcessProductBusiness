@@ -4,6 +4,7 @@ import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row, SaveMode}
 import org.apache.spark.{SparkConf, SparkContext}
+import org.slf4j.{Logger, LoggerFactory}
 import pub.sha0w.ETL.obj.Name
 import pub.sha0w.ETL.utils.FTPUtils
 
@@ -13,17 +14,16 @@ object MajorProcess {
     val seq = row.toSeq
     Row.fromSeq(seq.updated(schema.fieldIndex(key), value))
   }
-
+  private val logger: Logger = LoggerFactory.getLogger(MajorProcess.getClass)
   def main(args: Array[String]): Unit = {
     FTPUtils.initClient(args(0), args(1), args(2), args(3).toInt)
     val file_name_set = FTPUtils.listFile(args(4))
+    System.setProperty("hive.metastore.uris", args(5)) //hivemetastore = thrift://packone123:9083
     val conf = new SparkConf()
       .setAppName("SpringerProcess")
       .set("spark.driver.maxResultSize","2g")
-      .set("hive.metastore.uris", "thrift://packone123:9083")
     val sc = new SparkContext(conf)
     val hiveContext = new HiveContext(sc)
-    hiveContext.setConf("hive.metastore.uris", "thrift://packone123:9083")
     val o_table = hiveContext.read.table("origin.o_delivery_report_article")
     val t_table = hiveContext.read.table("temp.t_product_business_fulltext")
     val o_group_name = "articletitle"
