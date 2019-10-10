@@ -19,6 +19,7 @@ object MajorProcess {
     FTPUtils.initClient(args(0), args(1), args(2), args(3).toInt)
     val file_name_set = FTPUtils.listFile(args(4))
     System.setProperty("hive.metastore.uris", args(5)) //hivemetastore = thrift://packone123:9083
+    System.setProperty("org.apache.commons.net.ftp.systemType.default", args(6))
     val conf = new SparkConf()
       .setAppName("SpringerProcess")
       .set("spark.driver.maxResultSize","2g")
